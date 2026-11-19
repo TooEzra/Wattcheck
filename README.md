@@ -17,6 +17,56 @@ flowchart LR
     G --> H["8. Report<br/>PDF for decision makers"]
 ```
 
+## Inputs, engine and outputs
+
+```mermaid
+flowchart LR
+    subgraph Inputs
+        B["Building<br/>type · floor area · hours"]
+        R["Energy records<br/>month · kWh · cost"]
+        E["Equipment<br/>category · W · qty · hours · days"]
+        F["Findings<br/>area · priority · photo"]
+        M["Measures<br/>saving % · cost"]
+    end
+
+    subgraph Engine["Analysis engine"]
+        W["12-month window<br/>annual kWh + cost"]
+        EUI["EUI<br/>kWh/m²/year"]
+        AN["Anomaly flags"]
+        EN["End-use shares"]
+        RC["Reconciliation gap"]
+        PB["Saving + payback"]
+    end
+
+    subgraph Outputs
+        D["Dashboard<br/>totals · EUI comparison · trend"]
+        C["Charts<br/>monthly · end-use"]
+        RL["Recommendations<br/>saving · payback"]
+        RP["Report<br/>PDF / print"]
+        X["Export<br/>JSON / CSV"]
+    end
+
+    B --> W
+    R --> W
+    R --> AN
+    W --> EUI
+    E --> EN
+    E --> RC
+    W --> RC
+    EN --> PB
+    M --> PB
+
+    W --> D
+    EUI --> D
+    AN --> D
+    D --> C
+    PB --> RL
+    F --> RP
+    RL --> RP
+    D --> RP
+    D --> X
+```
+
 ## How data moves through the system
 
 ### 1. Collect
@@ -77,6 +127,18 @@ flowchart LR
 | Check | Gap between bills and equipment list, with warning |
 | Recommend | Savings, cost and payback per improvement |
 | Report | Audit report (PDF) and dashboard |
+
+## App features
+
+- **Multi-tenant institutions** with **Admin** (users, settings, deletion) and **Auditor** (create/edit audit data) roles.
+- **Buildings** with type, floor area and operating hours.
+- **Monthly energy records** entered by hand or imported from a CSV (`month,kwh,cost`) with per-row validation.
+- **Equipment inventory** across 15 categories, with a common-equipment catalog to pre-fill typical ratings.
+- **Reconciliation** of billed consumption against the equipment inventory, with a 15% tolerance warning.
+- **Audit findings** by area, with priority and an optional JPG/PNG photo.
+- **Recommendations** from a measure library, with estimated cost, estimated saving and automatic simple payback.
+- **Dashboard** with annual totals, EUI comparison, monthly trend and flagged unusual months.
+- **Reports** per building, exportable to PDF or printed, plus **JSON/CSV export** of the institution's own data.
 
 ## Good to know
 
